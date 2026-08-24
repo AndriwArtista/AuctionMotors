@@ -16,6 +16,7 @@ return new class extends Migration
             $table->decimal('valor_ofertado', 10, 2);
             $table->string('nome_licitante');
             $table->foreignId('veiculo_id')->constrained('veiculos')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
