@@ -13,7 +13,7 @@ class User extends Model
         'email',
         'senha',
     ];
-    
+
     public function lances()
     {
         return $this->hasMany(Lance::class);
