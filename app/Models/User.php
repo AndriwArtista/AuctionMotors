@@ -18,4 +18,9 @@ class User extends Model
     {
         return $this->hasMany(Lance::class);
     }
+
+    public function veiculos()
+    {
+        return $this->hasMany(Veiculo::class);
+    }
 }

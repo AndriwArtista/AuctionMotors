@@ -17,10 +17,13 @@ class VeiculoController extends Controller
 
     public function index()
     {
-        $veiculos = Veiculo::all()->map(function ($veiculo) {
-            $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
-            return $veiculo;
-        });
+        $veiculos = Veiculo::withMax('lances', 'valor_ofertado')
+            ->get()
+            ->map(function ($veiculo) {
+                $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
+                $veiculo->valor_atual = $veiculo->lances_max_valor_ofertado ?? $veiculo->valor_inicial;
+                return $veiculo;
+            });
 
         return view('veiculos.index', compact('veiculos'));
     }
@@ -61,7 +64,12 @@ class VeiculoController extends Controller
         $request->validate($regras, $mensagens);
 
         Veiculo::create($request->only([
-            'marca', 'modelo', 'ano', 'kilometragem', 'valor_inicial', 'data_encerramento',
+            'marca',
+            'modelo',
+            'ano',
+            'kilometragem',
+            'valor_inicial',
+            'data_encerramento',
         ]));
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
@@ -90,7 +98,12 @@ class VeiculoController extends Controller
 
         $veiculo = Veiculo::findOrFail($realId);
         $veiculo->update($request->only([
-            'marca', 'modelo', 'ano', 'kilometragem', 'valor_inicial', 'data_encerramento',
+            'marca',
+            'modelo',
+            'ano',
+            'kilometragem',
+            'valor_inicial',
+            'data_encerramento',
         ]));
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo atualizado com sucesso!');
@@ -106,4 +119,16 @@ class VeiculoController extends Controller
         Veiculo::findOrFail($realId)->delete();
         return redirect()->route('veiculos.index')->with('success', 'Veículo removido com sucesso!');
     }
+    public function list()
+    {
+        $id = session('user')['id'];
+
+        $veiculos = Veiculo::where('user_id', $id)->get()->transform(function ($veiculo) {
+            $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
+            return $veiculo;
+        });
+
+        return view('veiculos.list', compact('veiculos'));
+    }
+
 }

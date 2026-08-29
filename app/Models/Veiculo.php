@@ -17,4 +17,9 @@ class Veiculo extends Model
     {
         return $this->hasMany(Lance::class);
     }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

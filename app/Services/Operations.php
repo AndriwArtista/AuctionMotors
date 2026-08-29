@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Crypt;
 class Operations
 {
 
-    public function encryptId($id)
+    public static function encryptId($id)
     {
         return Crypt::encrypt($id);
     }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,9 +16,10 @@ return new class extends Migration
             $table->string('modelo');
             $table->integer('ano');
             $table->integer('kilometragem');
-            $table->decimal('valor_inicial',10, 2);
+            $table->decimal('valor_inicial', 10, 2);
             $table->dateTime('data_encerramento');
             $table->string('status')->default('disponivel');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
