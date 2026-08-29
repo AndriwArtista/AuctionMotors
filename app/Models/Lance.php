@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Lance extends Model
 {
@@ -16,5 +16,5 @@ class Lance extends Model
     {
         return $this->belongsTo(User::class);
     }
-    use SoftDeletes;
+
 }
