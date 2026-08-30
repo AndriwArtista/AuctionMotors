@@ -63,14 +63,23 @@ class VeiculoController extends Controller
         [$regras, $mensagens] = $this->regrasValidacao();
         $request->validate($regras, $mensagens);
 
-        Veiculo::create($request->only([
+        $user_id = session('user')['id'];
+        if (!$user_id) {
+            return redirect()->back();
+        }
+
+        $dados = $request->only([
             'marca',
             'modelo',
             'ano',
             'kilometragem',
             'valor_inicial',
             'data_encerramento',
-        ]));
+        ]);
+
+        $dados['user_id'] = $user_id;
+
+        Veiculo::create($dados);
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
     }
