@@ -9,6 +9,16 @@ class Veiculo extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'marca',
+        'modelo',
+        'ano',
+        'kilometragem',
+        'valor_inicial',
+        'data_encerramento',
+        'user_id'
+    ];
+
     protected $casts = [
         'data_encerramento' => 'datetime',
     ];
