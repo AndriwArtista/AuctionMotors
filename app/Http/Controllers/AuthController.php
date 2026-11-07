@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,23 +13,8 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function loginSubmit(Request $request)
+    public function loginSubmit(LoginRequest $request)
     {
-        $request->validate(
-            [
-                'text_email' => 'required|email|min:10',
-                'text_senha' => 'required|min:6',
-            ],
-            [
-                'text_email.required' => 'O campo e-mail é obrigatório.',
-                'text_email.email' => 'O campo de e-mail deve conter um endereço válido.',
-                'text_email.min' => 'O campo e-mail deve ter no mínimo 10 caracteres',
-
-                'text_senha.required' => 'O campo senha é obrigatório.',
-                'text_senha.min' => 'O campo senha deve ter no mínimo 6 caracteres',
-            ],
-        );
-
         $user = User::where('email', $request->input('text_email'))->first();
 
         if (!$user || !password_verify($request->input('text_senha'), $user->senha)) {

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VeiculoRequest;
+use App\Mail\LeilaoCriadoMail;
 use App\Models\Veiculo;
 use App\Services\Operations;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\LeilaoCriadoMail;
 
 class VeiculoController extends Controller
 {
@@ -17,9 +17,8 @@ class VeiculoController extends Controller
         $this->operations = $operations;
     }
 
-public function index()
+    public function index()
     {
-    
         $veiculos = Veiculo::withMax('lances', 'valor_ofertado')
             ->paginate(3);
 
@@ -37,56 +36,15 @@ public function index()
         return view('veiculos.create');
     }
 
-    private function regrasValidacao()
+    public function store(VeiculoRequest $request)
     {
-        return [
-            [
-                'marca' => 'required|min:2',
-                'modelo' => 'required|min:1',
-                'ano' => 'required|integer|min:1900',
-                'kilometragem' => 'required|integer|min:0',
-                'valor_inicial' => 'required|numeric|min:0',
-                'data_encerramento' => 'required|date',
-            ],
-            [
-                'marca.required' => 'Informe a marca do veículo.',
-                'marca.min' => 'A marca deve ter pelo menos 2 letras.',
-                'modelo.required' => 'Informe o modelo do veículo.',
-                'ano.required' => 'Informe o ano do veículo.',
-                'ano.integer' => 'O ano deve ser um número.',
-                'kilometragem.required' => 'Informe a kilometragem.',
-                'valor_inicial.required' => 'Informe o valor inicial do leilão.',
-                'valor_inicial.numeric' => 'O valor inicial deve ser um número.',
-                'data_encerramento.required' => 'Informe a data de encerramento do leilão.',
-            ],
-        ];
-    }
-
-    public function store(Request $request)
-    {
-        [$regras, $mensagens] = $this->regrasValidacao();
-        $request->validate($regras, $mensagens);
-
-        $user_id = session('user.id');
-        if (!$user_id) {
-            return redirect()->back();
-        }
-
-        $dados = $request->only([
-            'marca',
-            'modelo',
-            'ano',
-            'kilometragem',
-            'valor_inicial',
-            'data_encerramento',
-        ]);
-
-        $dados['user_id'] = $user_id;
+        $dados = $request->validated();
+        $dados['user_id'] = session('user.id');
 
         $veiculo = Veiculo::create($dados);
+
         // Dispara a notificação por e-mail
         Mail::to('teste@usuario.com')->send(new LeilaoCriadoMail($veiculo));
-
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
     }
@@ -104,27 +62,17 @@ public function index()
         return view('veiculos.edit', compact('veiculo', 'id'));
     }
 
-    public function update(Request $request, $id)
+    public function update(VeiculoRequest $request, $id)
     {
         $realId = $this->operations->decryptId($id);
         if (!$realId) {
             return redirect()->route('veiculos.index')->with('error', 'Link inválido.');
         }
 
-        [$regras, $mensagens] = $this->regrasValidacao();
-        $request->validate($regras, $mensagens);
-
         $veiculo = Veiculo::findOrFail($realId);
         $this->verificaDono($veiculo);
 
-        $veiculo->update($request->only([
-            'marca',
-            'modelo',
-            'ano',
-            'kilometragem',
-            'valor_inicial',
-            'data_encerramento',
-        ]));
+        $veiculo->update($request->validated());
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo atualizado com sucesso!');
     }

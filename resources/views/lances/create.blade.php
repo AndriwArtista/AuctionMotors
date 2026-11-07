@@ -45,11 +45,6 @@
                             {{ number_format($veiculo->kilometragem, 0, ',', '.') }} KM
                         </p>
 
-                        @php
-                            $maiorLance = $lances->max('valor_ofertado') ?? $veiculo->valor_inicial;
-                            $minLance = $maiorLance + 0.01;
-                        @endphp
-
                         <div class="p-4 rounded-4 mb-4" style="background-color: #f8f9fa; border-left: 5px solid #D4AF37;">
                             <div class="row text-center text-sm-start">
                                 <div class="col-sm-6 mb-3 mb-sm-0">

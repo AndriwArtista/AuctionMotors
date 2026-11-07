@@ -35,4 +35,16 @@ class Veiculo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // maior lance dado ate agora, ou o valor inicial se ninguem deu lance
+    public function maiorLance(): float
+    {
+        return (float) ($this->lances()->max('valor_ofertado') ?? $this->valor_inicial);
+    }
+
+    // o proximo lance precisa passar pelo menos 1 centavo do maior
+    public function valorMinimoLance(): float
+    {
+        return round($this->maiorLance() + 0.01, 2);
+    }
 }

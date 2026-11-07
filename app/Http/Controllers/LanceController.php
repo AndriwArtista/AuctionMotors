@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LanceRequest;
 use App\Models\Lance;
 use App\Models\User;
 use App\Models\Veiculo;
 use App\Services\Operations;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LanceController extends Controller
@@ -28,55 +28,32 @@ class LanceController extends Controller
 
         $veiculo = Veiculo::findOrFail($id);
         $lances = Lance::where('veiculo_id', $id)->orderBy('created_at', 'desc')->get();
+        $maiorLance = $veiculo->maiorLance();
+        $minLance = $veiculo->valorMinimoLance();
 
-        return view('lances.create', compact('veiculo', 'lances'));
+        return view('lances.create', compact('veiculo', 'lances', 'maiorLance', 'minLance'));
     }
 
-    public function store(Request $request, $encrypted_veiculo_id)
+    // as regras (valor minimo, dono, leilao encerrado) ficam no LanceRequest
+    public function store(LanceRequest $request, $encrypted_veiculo_id)
     {
-        $veiculo_id = $this->operations->decryptId($encrypted_veiculo_id);
-
-        if (!$veiculo_id) {
-            return redirect()->route('veiculos.index')->with('error', 'Veículo inválido.');
-        }
-
-        $user_id = session('user.id');
-        $veiculo = Veiculo::findOrFail($veiculo_id);
-
-        if ($veiculo->user_id === $user_id) {
-            return redirect()->back()->with('error', 'Você não pode dar lance no seu próprio veículo.');
-        }
-
-        if ($veiculo->data_encerramento->isPast()) {
-            return redirect()->back()->with('error', 'Esse leilão já foi encerrado.');
-        }
-
-        $maiorLanceAtual = Lance::where('veiculo_id', $veiculo_id)->max('valor_ofertado') ?? $veiculo->valor_inicial;
-        $valorMinimo = $maiorLanceAtual + 0.01;
-
-        $request->validate([
-            'valor_ofertado' => "required|numeric|min:{$valorMinimo}",
-        ], [
-            'valor_ofertado.required' => 'Informe o valor do lance.',
-            'valor_ofertado.numeric' => 'O lance deve ser um número.',
-            'valor_ofertado.min' => 'O lance deve ser maior do que a última oferta (Mínimo: R$ ' . number_format($valorMinimo, 2, ',', '.') . ').',
-        ]);
-
-        $user = User::findOrFail($user_id);
+        $veiculo = $request->veiculo();
+        $user = User::findOrFail(session('user.id'));
+        $valor = $request->validated()['valor_ofertado'];
 
         // trava o veiculo enquanto grava, assim dois lances ao mesmo tempo nao passam com o mesmo valor
-        $ok = DB::transaction(function () use ($veiculo_id, $request, $user) {
-            Veiculo::whereKey($veiculo_id)->lockForUpdate()->first();
+        $ok = DB::transaction(function () use ($veiculo, $valor, $user) {
+            Veiculo::whereKey($veiculo->id)->lockForUpdate()->first();
 
-            $maior = Lance::where('veiculo_id', $veiculo_id)->max('valor_ofertado');
-            if ($maior !== null && $request->input('valor_ofertado') <= $maior) {
+            $maior = Lance::where('veiculo_id', $veiculo->id)->max('valor_ofertado');
+            if ($maior !== null && $valor <= $maior) {
                 return false;
             }
 
             Lance::create([
-                'valor_ofertado' => $request->input('valor_ofertado'),
+                'valor_ofertado' => $valor,
                 'nome_licitante' => $user->nome,
-                'veiculo_id' => $veiculo_id,
+                'veiculo_id' => $veiculo->id,
                 'user_id' => $user->id,
             ]);
 
