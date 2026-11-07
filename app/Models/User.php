@@ -33,4 +33,10 @@ class User extends Model
     {
         return $this->hasMany(Veiculo::class);
     }
+
+    // leiloes que o usuario venceu
+    public function arremates()
+    {
+        return $this->hasMany(Arremate::class);
+    }
 }

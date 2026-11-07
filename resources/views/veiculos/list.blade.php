@@ -40,8 +40,8 @@
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                         <div
                             class="card-header bg-light border-0 d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
-                            <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
-                                <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
+                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
+                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
                             <span class="text-muted small">
                                 <i
@@ -64,14 +64,31 @@
                                 <span class="fs-4 fw-bold" style="color: #0b132b;">
                                     R$ {{ number_format($veiculo->valor_inicial, 2, ',', '.') }}
                                 </span>
+                                @if($veiculo->status === 'encerrado')
+                                    <span class="d-block small mt-1 {{ $veiculo->arremate?->user ? 'text-success' : 'text-muted' }}">
+                                        @if($veiculo->arremate?->user)
+                                            <i class="fa-solid fa-trophy me-1"></i>Vendido para {{ $veiculo->arremate->user->nome }}
+                                            por R$ {{ number_format($veiculo->arremate->valor_final, 2, ',', '.') }}
+                                        @else
+                                            Encerrado sem lances
+                                        @endif
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a href="{{ route('veiculos.edit', $veiculo->encrypted_id) }}"
-                                    class="btn w-100 fw-bold py-2 rounded-3 text-white shadow-sm"
-                                    style="background-color: #0b132b;">
-                                    <i class="fa-solid fa-pen-to-square me-1" style="color: #D4AF37;"></i> Editar
-                                </a>
+                                @if($veiculo->status === 'aberto')
+                                    <a href="{{ route('veiculos.edit', $veiculo->encrypted_id) }}"
+                                        class="btn w-100 fw-bold py-2 rounded-3 text-white shadow-sm"
+                                        style="background-color: #0b132b;">
+                                        <i class="fa-solid fa-pen-to-square me-1" style="color: #D4AF37;"></i> Editar
+                                    </a>
+                                @else
+                                    <a href="{{ route('lances.create', $veiculo->encrypted_id) }}"
+                                        class="btn btn-light border w-100 fw-semibold py-2 rounded-3 text-secondary">
+                                        <i class="fa-solid fa-eye me-1"></i> Ver
+                                    </a>
+                                @endif
 
                                 <form action="{{ route('veiculos.destroy', $veiculo->encrypted_id) }}" method="POST"
                                     class="w-100" onsubmit="return confirm('Tem certeza que deseja excluir este veículo?')">
