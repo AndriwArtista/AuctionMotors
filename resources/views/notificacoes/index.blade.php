@@ -20,13 +20,8 @@
             </form>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-            </div>
-        @endif
-
-        <div class="d-flex flex-column gap-2">
+        <x-flash />
+<div class="d-flex flex-column gap-2">
             @forelse($notificacoes as $notificacao)
                 <div class="card border-0 shadow-sm rounded-3 {{ $notificacao->lida_em ? 'opacity-75' : 'border-start border-4 border-' . $notificacao->cor() }}">
                     <div class="card-body d-flex align-items-center gap-3 py-3">

@@ -6,12 +6,12 @@
     <div class="container py-5">
         <div style="height: 4px; background: linear-gradient(90deg, #aa771c, #ffd700, #c5a059);" class="rounded mb-4"></div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-4 pb-2 border-bottom">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #0b132b;">Meus Veículos Cadastrados</h2>
                 <p class="text-secondary small mb-0">Gerencie os lotes que você colocou em leilão</p>
             </div>
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 <a href="{{ route('veiculos.index') }}"
                     class="btn btn-light border fw-semibold rounded-3 text-secondary shadow-sm">
                     <i class="fa-solid fa-arrow-left me-1"></i> Voltar
@@ -23,16 +23,7 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
-            </div>
-        @endif
+        <x-flash />
 
         <div class="row g-4">
             @forelse($veiculos as $veiculo)
@@ -40,9 +31,7 @@
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                         <div
                             class="card-header bg-light border-0 d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
-                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
-                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
-                            </span>
+                            <x-status-badge :status="$veiculo->status" />
                             <span class="text-muted small">
                                 <i
                                     class="fa-solid fa-gauge-high me-1"></i>{{ number_format($veiculo->kilometragem, 0, ',', '.') }}
@@ -80,7 +69,7 @@
                                 @endif
                             </div>
 
-                            <div class="d-flex gap-2">
+                            <div class="d-flex flex-wrap gap-2">
                                 @if($veiculo->status === 'aberto')
                                     <a href="{{ route('veiculos.edit', $veiculo->encrypted_id) }}"
                                         class="btn w-100 fw-bold py-2 rounded-3 text-white shadow-sm"

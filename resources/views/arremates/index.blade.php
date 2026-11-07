@@ -11,6 +11,8 @@
             <p class="text-secondary small mb-0">Leilões que você venceu</p>
         </div>
 
+        <x-flash />
+
         <div class="row g-4">
             @forelse($arremates as $arremate)
                 <div class="col-12 col-md-6 col-lg-4">

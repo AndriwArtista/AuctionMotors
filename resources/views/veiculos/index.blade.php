@@ -5,12 +5,12 @@
 
     <div class="container py-5">
         <div style="height: 4px; background: linear-gradient(90deg, #aa771c, #ffd700, #c5a059);" class="rounded mb-4"></div>
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-4 pb-2 border-bottom">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #0b132b;">Veículos em Leilão</h2>
                 <p class="text-secondary small mb-0">Confira os lotes disponíveis e faça seu lance</p>
             </div>
-            <div>
+            <div class="d-flex flex-wrap gap-2">
                 <a href="{{ route('veiculos.create') }}" class="btn fw-bold text-white shadow-sm"
                     style="background-color: #0b132b;">
                     <i class="fa-solid fa-plus me-1" style="color: #D4AF37;"></i> Novo Veículo
@@ -19,7 +19,7 @@
                     style="background-color: #0b132b;">
                     <i class="fa-solid fa-car me-1" style="color: #D4AF37;"></i> Meus Veículos
                 </a>
-                <a href="{{ route('relatorios.veiculos', array_filter(['categoria' => $categoriaSelecionada])) }}" target="_blank" class="btn fw-bold text-white shadow-sm ms-1"
+                <a href="{{ route('relatorios.veiculos', array_filter(['categoria' => $categoriaSelecionada])) }}" target="_blank" class="btn fw-bold text-white shadow-sm"
                     style="background-color: #0b132b;">
                     <i class="fa-solid fa-file-pdf me-1" style="color: #D4AF37;"></i> Relatório PDF
                 </a>
@@ -46,25 +46,15 @@
             @endif
         </form>
 
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
-            </div>
-        @endif
+        <x-flash />
+
         <div class="row g-4">
             @forelse($veiculos as $veiculo)
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                         <div
                             class="card-header bg-light border-0 d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
-                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
-                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
-                            </span>
+                            <x-status-badge :status="$veiculo->status" />
                             <span class="text-muted small">
                                 <i class="fa-solid fa-layer-group me-1" style="color: #D4AF37;"></i>{{ $veiculo->categoria->nome ?? 'Sem categoria' }}
                             </span>

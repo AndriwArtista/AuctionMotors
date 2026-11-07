@@ -16,16 +16,7 @@
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
-            </div>
-        @endif
+        <x-flash />
 
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
             <div class="table-responsive">
