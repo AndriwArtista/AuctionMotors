@@ -18,9 +18,13 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('arremates.*') ? 'active' : '' }}" href="{{ route('arremates.index') }}">Meus arremates</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }}" href="{{ route('categorias.index') }}">Categorias</a>
-            </li>
+            @if(session('user.is_admin'))
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }}" href="{{ route('categorias.index') }}">
+                        <i class="fa-solid fa-shield-halved me-1" style="color: #D4AF37;"></i>Categorias
+                    </a>
+                </li>
+            @endif
         </ul>
 
         <div class="d-flex align-items-center gap-3">

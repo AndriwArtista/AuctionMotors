@@ -60,6 +60,7 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'nome' => $user->nome,
+                'is_admin' => $user->is_admin,
             ]
         ]);
     }

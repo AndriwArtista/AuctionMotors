@@ -10,11 +10,14 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // usuarios fixos pra usar na apresentacao (senha: teste123)
-        User::create([
+        // o fulano e o administrador (unico que gerencia as categorias)
+        $admin = User::create([
             'nome' => 'fulano',
             'email' => 'fulano@exemplo.com',
             'senha' => bcrypt('teste123'),
         ]);
+        $admin->is_admin = true;
+        $admin->save();
 
         User::create([
             'nome' => 'fulano2',

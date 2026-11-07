@@ -38,7 +38,8 @@ Route::middleware(['logged'])->group(function () {
     Route::patch('/notificacoes/lidas', [NotificacaoController::class, 'marcarTodas'])->name('notificacoes.marcarTodas');
     Route::patch('/notificacoes/{id}/lida', [NotificacaoController::class, 'marcarLida'])->name('notificacoes.marcarLida');
 
-    Route::resource('categorias', CategoriaController::class)->except('show');
+    // categorias: so administrador
+    Route::resource('categorias', CategoriaController::class)->except('show')->middleware('admin');
 
     Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
     Route::get('/relatorios/arremates/{id}', [RelatorioController::class, 'comprovanteArremate'])->name('relatorios.arremate');

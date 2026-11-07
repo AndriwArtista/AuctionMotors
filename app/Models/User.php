@@ -22,6 +22,7 @@ class User extends Model
 
     protected $casts = [
         'last_login' => 'datetime',
+        'is_admin' => 'boolean',
     ];
 
     public function lances()
