@@ -8,7 +8,7 @@
                     <div style="height: 4px; background: linear-gradient(90deg, #aa771c, #ffd700, #c5a059);"></div>
                     <div class="card-body p-4 p-sm-5">
                         <div class="text-center mb-4">
-                            <img src="assets/images/logo.png" alt="Notes Logo" style="max-height: 200px;" class="img-fluid">
+                            <img src="{{ asset('assets/images/logo.png') }}" alt="AuctionMotors" style="max-height: 200px;" class="img-fluid">
                             <h4 class="fw-bold mb-1" style="color: #0b132b; letter-spacing: 0.5px;">Seja Bem-vindo</h4>
                             <p class="text-secondary small mb-0">Insira suas credenciais para continuar</p>
                         </div>

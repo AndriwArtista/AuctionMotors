@@ -41,7 +41,7 @@
                         <div
                             class="card-header bg-light border-0 d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
                             <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
-                                <i class="fa-solid fa-tag me-1"></i>{{ $veiculo->status }}
+                                <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
                             <span class="text-muted small">
                                 <i

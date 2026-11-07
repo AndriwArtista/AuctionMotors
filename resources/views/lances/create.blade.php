@@ -30,7 +30,7 @@
                     <div class="card-body p-4 p-sm-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
-                                <i class="fa-solid fa-tag me-1"></i>{{ $veiculo->status }}
+                                <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
                             <span class="text-muted small">
                                 <i class="fa-solid fa-clock me-1" style="color: #D4AF37;"></i>

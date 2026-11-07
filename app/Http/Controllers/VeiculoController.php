@@ -67,7 +67,7 @@ public function index()
         [$regras, $mensagens] = $this->regrasValidacao();
         $request->validate($regras, $mensagens);
 
-        $user_id = session('user')['id'];
+        $user_id = session('user.id');
         if (!$user_id) {
             return redirect()->back();
         }
@@ -99,6 +99,8 @@ public function index()
         }
 
         $veiculo = Veiculo::findOrFail($realId);
+        $this->verificaDono($veiculo);
+
         return view('veiculos.edit', compact('veiculo', 'id'));
     }
 
@@ -113,6 +115,8 @@ public function index()
         $request->validate($regras, $mensagens);
 
         $veiculo = Veiculo::findOrFail($realId);
+        $this->verificaDono($veiculo);
+
         $veiculo->update($request->only([
             'marca',
             'modelo',
@@ -132,12 +136,16 @@ public function index()
             return redirect()->route('veiculos.index')->with('error', 'Link inválido.');
         }
 
-        Veiculo::findOrFail($realId)->delete();
+        $veiculo = Veiculo::findOrFail($realId);
+        $this->verificaDono($veiculo);
+
+        $veiculo->delete();
         return redirect()->route('veiculos.index')->with('success', 'Veículo removido com sucesso!');
     }
+
     public function list()
     {
-        $id = session('user')['id'];
+        $id = session('user.id');
 
         $veiculos = Veiculo::where('user_id', $id)->get()->transform(function ($veiculo) {
             $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
@@ -147,4 +155,9 @@ public function index()
         return view('veiculos.list', compact('veiculos'));
     }
 
+    // so quem cadastrou o veiculo pode editar ou excluir
+    private function verificaDono(Veiculo $veiculo)
+    {
+        abort_if($veiculo->user_id !== session('user.id'), 403, 'Você não tem permissão para alterar este veículo.');
+    }
 }

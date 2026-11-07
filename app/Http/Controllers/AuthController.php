@@ -16,7 +16,7 @@ class AuthController extends Controller
     {
         $request->validate(
             [
-                'text_email' => 'required|min:10',
+                'text_email' => 'required|email|min:10',
                 'text_senha' => 'required|min:6',
             ],
             [
@@ -29,31 +29,34 @@ class AuthController extends Controller
             ],
         );
 
-        $email = $request->input('text_email');
-        $senha = $request->input('text_senha');
-        $user = User::where('email', $email)->first();
-        if (!$user) {
-            return redirect()->back()->withInput()->with('login_error', 'Email ou senha incorretos!');
-        } else {
-            if (!password_verify($senha, $user->senha)) {
-                return redirect()->back()->withInput()->with('login_error', 'Username ou password incorretos!');
-            }
+        $user = User::where('email', $request->input('text_email'))->first();
+
+        if (!$user || !password_verify($request->input('text_senha'), $user->senha)) {
+            return redirect()->back()->withInput()->with('login_error', 'E-mail ou senha incorretos!');
         }
-        $user->last_login = date('Y-m-d H:i:s');
+
+        $user->last_login = now();
         $user->save();
+
+        // gera um novo id de sessao pra evitar session fixation
+        $request->session()->regenerate();
+
         session([
             'user' => [
                 'id' => $user->id,
                 'nome' => $user->nome,
             ]
         ]);
-        return redirect('/');
 
+        return redirect('/');
     }
 
-        public function logout()
+    public function logout(Request $request)
     {
         session()->forget('user');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('login');
     }
 }
