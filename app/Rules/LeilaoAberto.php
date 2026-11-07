@@ -30,7 +30,7 @@ class LeilaoAberto implements ValidationRule
             return;
         }
 
-        if ($this->veiculo->data_encerramento->isPast()) {
+        if (!$this->veiculo->estaAberto()) {
             $fail('Esse leilão já foi encerrado.');
         }
     }

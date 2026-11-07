@@ -16,6 +16,9 @@
                 <a class="nav-link {{ request()->routeIs('veiculos.listar') ? 'active' : '' }}" href="{{ route('veiculos.listar') }}">Meus veículos</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('arremates.*') ? 'active' : '' }}" href="{{ route('arremates.index') }}">Meus arremates</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }}" href="{{ route('categorias.index') }}">Categorias</a>
             </li>
         </ul>

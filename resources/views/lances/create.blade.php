@@ -29,12 +29,12 @@
                 <div class="card border-0 shadow-sm rounded-4 bg-white h-100 overflow-hidden">
                     <div class="card-body p-4 p-sm-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
-                                <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
+                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
+                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
                             <span class="text-muted small">
                                 <i class="fa-solid fa-clock me-1" style="color: #D4AF37;"></i>
-                                Encerra em: {{ \Carbon\Carbon::parse($veiculo->data_encerramento)->format('d/m/Y H:i') }}
+                                {{ $veiculo->status === 'aberto' ? 'Encerra em' : 'Encerrou em' }}: {{ $veiculo->data_encerramento->format('d/m/Y H:i') }}
                             </span>
                         </div>
 
@@ -62,6 +62,25 @@
                             </div>
                         </div>
 
+                        @if($veiculo->status === 'encerrado')
+                            <div class="p-4 rounded-4 text-center border">
+                                <i class="fa-solid fa-flag-checkered fa-2x mb-2" style="color: #D4AF37;"></i>
+                                <h5 class="fw-bold mb-1" style="color: #0b132b;">Leilão encerrado</h5>
+                                @if($veiculo->arremate?->user)
+                                    <p class="mb-0 text-secondary">
+                                        Arrematado por <strong>{{ $veiculo->arremate->user->nome }}</strong>
+                                        por <strong>R$ {{ number_format($veiculo->arremate->valor_final, 2, ',', '.') }}</strong>
+                                        em {{ $veiculo->arremate->encerrado_em->format('d/m/Y H:i') }}.
+                                    </p>
+                                @else
+                                    <p class="mb-0 text-secondary">Ninguém deu lance nesse veículo.</p>
+                                @endif
+                            </div>
+                        @elseif($veiculo->user_id === session('user.id'))
+                            <div class="alert alert-secondary border-0 rounded-3 mb-0">
+                                <i class="fa-solid fa-circle-info me-1"></i>Esse veículo é seu, então você só acompanha os lances.
+                            </div>
+                        @else
                         <form action="{{ route('lances.store', \App\Services\Operations::encryptId($veiculo->id)) }}"
                             method="POST">
                             @csrf
@@ -86,6 +105,7 @@
                                 <i class="fa-solid fa-gavel me-2" style="color: #D4AF37;"></i> Confirmar Lance
                             </button>
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>

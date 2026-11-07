@@ -42,6 +42,17 @@ class Veiculo extends Model
         return $this->belongsTo(Categoria::class)->withTrashed();
     }
 
+    public function arremate()
+    {
+        return $this->hasOne(Arremate::class);
+    }
+
+    // leilao aberto = status aberto e ainda nao passou da data
+    public function estaAberto(): bool
+    {
+        return $this->status === 'aberto' && $this->data_encerramento->isFuture();
+    }
+
     // maior lance dado ate agora, ou o valor inicial se ninguem deu lance
     public function maiorLance(): float
     {

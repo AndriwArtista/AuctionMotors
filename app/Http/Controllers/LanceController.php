@@ -6,16 +6,19 @@ use App\Http\Requests\LanceRequest;
 use App\Models\Lance;
 use App\Models\User;
 use App\Models\Veiculo;
+use App\Services\LeilaoService;
 use App\Services\Operations;
 use Illuminate\Support\Facades\DB;
 
 class LanceController extends Controller
 {
     protected $operations;
+    protected $leilaoService;
 
-    public function __construct(Operations $operations)
+    public function __construct(Operations $operations, LeilaoService $leilaoService)
     {
         $this->operations = $operations;
+        $this->leilaoService = $leilaoService;
     }
 
     public function index($veiculo_id)
@@ -27,6 +30,13 @@ class LanceController extends Controller
         }
 
         $veiculo = Veiculo::findOrFail($id);
+
+        // se ja passou da data, fecha o leilao antes de mostrar
+        if ($veiculo->status === 'aberto' && $veiculo->data_encerramento->isPast()) {
+            $this->leilaoService->encerrar($veiculo);
+        }
+
+        $veiculo->load(['categoria', 'arremate.user']);
         $lances = Lance::where('veiculo_id', $id)->orderBy('created_at', 'desc')->get();
         $maiorLance = $veiculo->maiorLance();
         $minLance = $veiculo->valorMinimoLance();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArremateController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LanceController;
@@ -29,6 +30,8 @@ Route::middleware(['logged'])->group(function () {
 
     Route::get('/lances/{veiculo_id}', [LanceController::class, 'index'])->name('lances.create');
     Route::post('/lances/{veiculo_id}', [LanceController::class, 'store'])->name('lances.store');
+
+    Route::get('/arremates', [ArremateController::class, 'index'])->name('arremates.index');
 
     Route::resource('categorias', CategoriaController::class)->except('show');
 

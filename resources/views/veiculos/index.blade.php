@@ -62,8 +62,8 @@
                     <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                         <div
                             class="card-header bg-light border-0 d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
-                            <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
-                                <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
+                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
+                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
                             <span class="text-muted small">
                                 <i class="fa-solid fa-layer-group me-1" style="color: #D4AF37;"></i>{{ $veiculo->categoria->nome ?? 'Sem categoria' }}
@@ -75,17 +75,32 @@
                             </h5>
                             <p class="text-muted small mb-3">Ano: <strong>{{ $veiculo->ano }}</strong></p>
                             <div class="p-3 rounded-3 mb-3" style="background-color: #f8f9fa; border-left: 4px solid #D4AF37;">
-                                <span class="text-secondary small d-block">
-                                    {{ $veiculo->lances_max_valor_ofertado ? 'Último Lance' : 'Valor Inicial' }}
-                                </span>
+                                @if($veiculo->status === 'encerrado')
+                                    <span class="text-secondary small d-block">
+                                        {{ $veiculo->arremate?->user ? 'Arrematado por ' . $veiculo->arremate->user->nome : 'Encerrado sem lances' }}
+                                    </span>
+                                @else
+                                    <span class="text-secondary small d-block">
+                                        {{ $veiculo->lances_max_valor_ofertado ? 'Último Lance' : 'Valor Inicial' }}
+                                    </span>
+                                @endif
                                 <span class="fs-4 fw-bold" style="color: #0b132b;">
                                     R$ {{ number_format($veiculo->valor_atual, 2, ',', '.') }}
                                 </span>
+                                @if($veiculo->status === 'aberto')
+                                    <span class="d-block text-muted small mt-1">
+                                        <i class="fa-solid fa-clock me-1"></i>Encerra {{ $veiculo->data_encerramento->format('d/m/Y H:i') }}
+                                    </span>
+                                @endif
                             </div>
                             <a href="{{ route('lances.create', $veiculo->encrypted_id) }}"
                                 class="btn w-100 fw-bold py-2 rounded-3 shadow-sm text-white"
                                 style="background-color: #0b132b;">
-                                <i class="fa-solid fa-gavel me-2" style="color: #D4AF37;"></i>Dar Lance
+                                @if($veiculo->status === 'aberto')
+                                    <i class="fa-solid fa-gavel me-2" style="color: #D4AF37;"></i>Dar Lance
+                                @else
+                                    <i class="fa-solid fa-eye me-2" style="color: #D4AF37;"></i>Ver Resultado
+                                @endif
                             </a>
                         </div>
 

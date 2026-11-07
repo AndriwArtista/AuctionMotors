@@ -6,6 +6,7 @@ use App\Http\Requests\VeiculoRequest;
 use App\Mail\LeilaoCriadoMail;
 use App\Models\Categoria;
 use App\Models\Veiculo;
+use App\Services\LeilaoService;
 use App\Services\Operations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -13,20 +14,26 @@ use Illuminate\Support\Facades\Mail;
 class VeiculoController extends Controller
 {
     protected $operations;
+    protected $leilaoService;
 
-    public function __construct(Operations $operations)
+    public function __construct(Operations $operations, LeilaoService $leilaoService)
     {
         $this->operations = $operations;
+        $this->leilaoService = $leilaoService;
     }
 
     public function index(Request $request)
     {
+        // garante que os leiloes vencidos ja aparecem encerrados mesmo sem o scheduler rodando
+        $this->leilaoService->encerrarVencidos();
+
         $categorias = Categoria::orderBy('nome')->get();
         $categoriaSelecionada = $request->query('categoria');
 
-        $veiculos = Veiculo::with('categoria')
+        $veiculos = Veiculo::with(['categoria', 'arremate.user'])
             ->withMax('lances', 'valor_ofertado')
             ->when($categoriaSelecionada, fn ($q) => $q->where('categoria_id', $categoriaSelecionada))
+            ->orderBy('status') // abertos primeiro
             ->orderBy('data_encerramento')
             ->paginate(3)
             ->withQueryString();
@@ -70,6 +77,10 @@ class VeiculoController extends Controller
         $veiculo = Veiculo::findOrFail($realId);
         $this->verificaDono($veiculo);
 
+        if ($veiculo->status === 'encerrado') {
+            return redirect()->route('veiculos.listar')->with('error', 'Leilão encerrado não pode mais ser editado.');
+        }
+
         $categorias = Categoria::orderBy('nome')->get();
 
         return view('veiculos.edit', compact('veiculo', 'id', 'categorias'));
@@ -84,6 +95,10 @@ class VeiculoController extends Controller
 
         $veiculo = Veiculo::findOrFail($realId);
         $this->verificaDono($veiculo);
+
+        if ($veiculo->status === 'encerrado') {
+            return redirect()->route('veiculos.listar')->with('error', 'Leilão encerrado não pode mais ser editado.');
+        }
 
         $veiculo->update($request->validated());
 
@@ -108,7 +123,9 @@ class VeiculoController extends Controller
     {
         $id = session('user.id');
 
-        $veiculos = Veiculo::with('categoria')->where('user_id', $id)->get()->transform(function ($veiculo) {
+        $this->leilaoService->encerrarVencidos();
+
+        $veiculos = Veiculo::with(['categoria', 'arremate.user'])->where('user_id', $id)->get()->transform(function ($veiculo) {
             $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
             return $veiculo;
         });
