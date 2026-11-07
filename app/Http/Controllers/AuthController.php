@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,34 @@ class AuthController extends Controller
             return redirect()->back()->withInput()->with('login_error', 'E-mail ou senha incorretos!');
         }
 
+        $this->logarUsuario($request, $user);
+
+        return redirect('/');
+    }
+
+    public function register()
+    {
+        return view('register');
+    }
+
+    public function registerSubmit(RegisterRequest $request)
+    {
+        $dados = $request->validated();
+
+        $user = User::create([
+            'nome' => $dados['nome'],
+            'email' => $dados['email'],
+            'senha' => bcrypt($dados['senha']),
+        ]);
+
+        // ja entra logado depois de criar a conta
+        $this->logarUsuario($request, $user);
+
+        return redirect()->route('veiculos.index')->with('success', 'Conta criada com sucesso! Bem-vindo, ' . $user->nome . '.');
+    }
+
+    private function logarUsuario(Request $request, User $user)
+    {
         $user->last_login = now();
         $user->save();
 
@@ -33,8 +62,6 @@ class AuthController extends Controller
                 'nome' => $user->nome,
             ]
         ]);
-
-        return redirect('/');
     }
 
     public function logout(Request $request)

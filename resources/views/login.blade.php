@@ -41,7 +41,7 @@
                                     </span>
                                     <input type="password"
                                         class="form-control bg-light border-0 shadow-none px-3 py-2-5 text-dark"
-                                        name="text_senha" placeholder="Digite sua senha" value="{{ old('text_senha') }}">
+                                        name="text_senha" placeholder="Digite sua senha">
                                 </div>
                                 @error('text_senha')
                                     <div class="text-danger small mt-1 d-flex align-items-center fw-medium">
@@ -56,6 +56,9 @@
                                 </button>
                             </div>
                         </form>
+                        <p class="text-center small mb-0">
+                            Ainda não tem conta? <a href="{{ route('register') }}" class="fw-semibold" style="color: #aa771c;">Criar conta</a>
+                        </p>
                         @if(session('login_error'))
                             <div class="alert alert-danger border-0 text-center rounded-3 mb-0 mt-4 small p-3 shadow-sm">
                                 <i class="fa-solid fa-circle-xmark me-1"></i> {{ session('login_error') }}
