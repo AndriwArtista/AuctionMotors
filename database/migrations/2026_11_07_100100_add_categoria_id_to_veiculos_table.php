@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('veiculos', function (Blueprint $table) {
+            // nao deixa apagar uma categoria que ainda tem veiculo
+            $table->foreignId('categoria_id')->nullable()->after('id')
+                ->constrained('categorias')->restrictOnDelete();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('veiculos', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('categoria_id');
+        });
+    }
+};

@@ -17,7 +17,8 @@ class Veiculo extends Model
         'valor_inicial',
         'data_encerramento',
         'status',
-        'user_id'
+        'user_id',
+        'categoria_id',
     ];
 
     protected $casts = [
@@ -34,6 +35,11 @@ class Veiculo extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class)->withTrashed();
     }
 
     // maior lance dado ate agora, ou o valor inicial se ninguem deu lance

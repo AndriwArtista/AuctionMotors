@@ -41,7 +41,7 @@
                         <h2 class="fw-bold mb-1" style="color: #0b132b;">
                             {{ $veiculo->marca }} {{ $veiculo->modelo }}
                         </h2>
-                        <p class="text-secondary small mb-4">Ano {{ $veiculo->ano }} •
+                        <p class="text-secondary small mb-4">{{ $veiculo->categoria->nome ?? 'Sem categoria' }} • Ano {{ $veiculo->ano }} •
                             {{ number_format($veiculo->kilometragem, 0, ',', '.') }} KM
                         </p>
 

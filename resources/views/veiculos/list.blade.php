@@ -54,7 +54,10 @@
                             <h5 class="fw-bold mb-1" style="color: #0b132b;">
                                 {{ $veiculo->marca }} {{ $veiculo->modelo }}
                             </h5>
-                            <p class="text-muted small mb-3">Ano: <strong>{{ $veiculo->ano }}</strong></p>
+                            <p class="text-muted small mb-3">
+                                Ano: <strong>{{ $veiculo->ano }}</strong> •
+                                {{ $veiculo->categoria->nome ?? 'Sem categoria' }}
+                            </p>
 
                             <div class="p-3 rounded-3 mb-3" style="background-color: #f8f9fa; border-left: 4px solid #D4AF37;">
                                 <span class="text-secondary small d-block">Valor Inicial Cadastrado</span>

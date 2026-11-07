@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VeiculoRequest;
 use App\Mail\LeilaoCriadoMail;
+use App\Models\Categoria;
 use App\Models\Veiculo;
 use App\Services\Operations;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class VeiculoController extends Controller
@@ -17,10 +19,17 @@ class VeiculoController extends Controller
         $this->operations = $operations;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $veiculos = Veiculo::withMax('lances', 'valor_ofertado')
-            ->paginate(3);
+        $categorias = Categoria::orderBy('nome')->get();
+        $categoriaSelecionada = $request->query('categoria');
+
+        $veiculos = Veiculo::with('categoria')
+            ->withMax('lances', 'valor_ofertado')
+            ->when($categoriaSelecionada, fn ($q) => $q->where('categoria_id', $categoriaSelecionada))
+            ->orderBy('data_encerramento')
+            ->paginate(3)
+            ->withQueryString();
 
         $veiculos->getCollection()->transform(function ($veiculo) {
             $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
@@ -28,12 +37,14 @@ class VeiculoController extends Controller
             return $veiculo;
         });
 
-        return view('veiculos.index', compact('veiculos'));
+        return view('veiculos.index', compact('veiculos', 'categorias', 'categoriaSelecionada'));
     }
 
     public function create()
     {
-        return view('veiculos.create');
+        $categorias = Categoria::orderBy('nome')->get();
+
+        return view('veiculos.create', compact('categorias'));
     }
 
     public function store(VeiculoRequest $request)
@@ -59,7 +70,9 @@ class VeiculoController extends Controller
         $veiculo = Veiculo::findOrFail($realId);
         $this->verificaDono($veiculo);
 
-        return view('veiculos.edit', compact('veiculo', 'id'));
+        $categorias = Categoria::orderBy('nome')->get();
+
+        return view('veiculos.edit', compact('veiculo', 'id', 'categorias'));
     }
 
     public function update(VeiculoRequest $request, $id)
@@ -95,7 +108,7 @@ class VeiculoController extends Controller
     {
         $id = session('user.id');
 
-        $veiculos = Veiculo::where('user_id', $id)->get()->transform(function ($veiculo) {
+        $veiculos = Veiculo::with('categoria')->where('user_id', $id)->get()->transform(function ($veiculo) {
             $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
             return $veiculo;
         });

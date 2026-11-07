@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LanceController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\VeiculoController;
@@ -28,6 +29,8 @@ Route::middleware(['logged'])->group(function () {
 
     Route::get('/lances/{veiculo_id}', [LanceController::class, 'index'])->name('lances.create');
     Route::post('/lances/{veiculo_id}', [LanceController::class, 'store'])->name('lances.store');
+
+    Route::resource('categorias', CategoriaController::class)->except('show');
 
     Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
 });
