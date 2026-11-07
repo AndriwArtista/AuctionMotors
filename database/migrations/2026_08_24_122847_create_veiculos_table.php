@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->integer('kilometragem');
             $table->decimal('valor_inicial', 10, 2);
             $table->dateTime('data_encerramento');
-            $table->string('status')->default('disponivel');
+            $table->string('status')->default('aberto');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

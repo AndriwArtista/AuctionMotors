@@ -16,11 +16,14 @@ class Veiculo extends Model
         'kilometragem',
         'valor_inicial',
         'data_encerramento',
+        'status',
         'user_id'
     ];
 
     protected $casts = [
         'data_encerramento' => 'datetime',
+        'valor_inicial' => 'decimal:2',
+        'user_id' => 'integer',
     ];
 
     public function lances()
@@ -28,7 +31,7 @@ class Veiculo extends Model
         return $this->hasMany(Lance::class);
     }
 
-    public function users()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

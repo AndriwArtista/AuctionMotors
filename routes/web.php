@@ -2,20 +2,17 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LanceController;
-use App\Http\Controllers\VeiculoController;
-use App\Http\Middleware\CheckIsNotLogged;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\VeiculoController;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
-
-Route::middleware([CheckIsNotLogged::class])->group(function () {
+Route::middleware(['not_logged'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login-submit', [AuthController::class, 'loginSubmit'])->name('login.submit');
 });
 
 Route::middleware(['logged'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [VeiculoController::class, 'index'])->name('veiculos.index');
 
@@ -28,4 +25,6 @@ Route::middleware(['logged'])->group(function () {
 
     Route::get('/lances/{veiculo_id}', [LanceController::class, 'index'])->name('lances.create');
     Route::post('/lances/{veiculo_id}', [LanceController::class, 'store'])->name('lances.store');
+
+    Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
 });
