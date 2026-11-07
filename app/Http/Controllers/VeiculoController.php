@@ -17,15 +17,17 @@ class VeiculoController extends Controller
         $this->operations = $operations;
     }
 
-    public function index()
+public function index()
     {
+    
         $veiculos = Veiculo::withMax('lances', 'valor_ofertado')
-            ->get()
-            ->map(function ($veiculo) {
-                $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
-                $veiculo->valor_atual = $veiculo->lances_max_valor_ofertado ?? $veiculo->valor_inicial;
-                return $veiculo;
-            });
+            ->paginate(3);
+
+        $veiculos->getCollection()->transform(function ($veiculo) {
+            $veiculo->encrypted_id = $this->operations->encryptId($veiculo->id);
+            $veiculo->valor_atual = $veiculo->lances_max_valor_ofertado ?? $veiculo->valor_inicial;
+            return $veiculo;
+        });
 
         return view('veiculos.index', compact('veiculos'));
     }
