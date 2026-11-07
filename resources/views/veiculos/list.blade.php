@@ -69,6 +69,10 @@
                                         @if($veiculo->arremate?->user)
                                             <i class="fa-solid fa-trophy me-1"></i>Vendido para {{ $veiculo->arremate->user->nome }}
                                             por R$ {{ number_format($veiculo->arremate->valor_final, 2, ',', '.') }}
+                                            <a href="{{ route('relatorios.arremate', \App\Services\Operations::encryptId($veiculo->arremate->id)) }}"
+                                                class="d-block mt-1 small" style="color: #aa771c;">
+                                                <i class="fa-solid fa-file-pdf me-1"></i>Baixar comprovante
+                                            </a>
                                         @else
                                             Encerrado sem lances
                                         @endif
