@@ -26,6 +26,30 @@
 
                             <div class="row g-3">
 
+                                <div class="col-12 mb-2">
+                                    <label class="form-label text-dark small fw-semibold">Categoria</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0"
+                                            style="background-color: #0b132b; color: #D4AF37;">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                        </span>
+                                        <select name="categoria_id"
+                                            class="form-select bg-light border-0 shadow-none px-3 py-2 text-dark @error('categoria_id') is-invalid @enderror">
+                                            <option value="">Selecione...</option>
+                                            @foreach($categorias as $categoria)
+                                                <option value="{{ $categoria->id }}" @selected(old('categoria_id', $veiculo->categoria_id ?? '') == $categoria->id)>
+                                                    {{ $categoria->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('categoria_id')
+                                        <div class="text-danger small mt-1 fw-medium">
+                                            <i class="fa-solid fa-circle-exclamation me-1"></i>{{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
                                 <div class="col-md-6 mb-2">
                                     <label class="form-label text-dark small fw-semibold">Marca</label>
                                     <div class="input-group">

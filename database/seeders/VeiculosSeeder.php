@@ -21,7 +21,8 @@ class VeiculosSeeder extends Seeder
                 'data_encerramento' => Carbon::now()->addDays(7),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'user_id' => 1
+                'user_id' => 1,
+                'categoria_id' => 1
             ],
             [
                 'marca' => 'Honda',
@@ -33,7 +34,8 @@ class VeiculosSeeder extends Seeder
                 'data_encerramento' => Carbon::now()->addDays(10),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'user_id' => 1
+                'user_id' => 1,
+                'categoria_id' => 1
             ],
             [
                 'marca' => 'Jeep',
@@ -45,7 +47,8 @@ class VeiculosSeeder extends Seeder
                 'data_encerramento' => Carbon::now()->addDays(5),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'user_id' => 2
+                'user_id' => 2,
+                'categoria_id' => 2
             ],
         ]);
     }

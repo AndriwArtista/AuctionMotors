@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VeiculoRequest extends FormRequest
 {
@@ -16,6 +17,7 @@ class VeiculoRequest extends FormRequest
         $anoMaximo = now()->year + 1;
 
         $regras = [
+            'categoria_id' => ['required', Rule::exists('categorias', 'id')->whereNull('deleted_at')],
             'marca' => 'required|string|min:2|max:50',
             'modelo' => 'required|string|min:1|max:100',
             'ano' => "required|integer|min:1900|max:{$anoMaximo}",
@@ -29,12 +31,15 @@ class VeiculoRequest extends FormRequest
             $regras['data_encerramento'] .= '|after:now';
         }
 
+
         return $regras;
     }
 
     public function messages(): array
     {
         return [
+            'categoria_id.required' => 'Escolha a categoria do veículo.',
+            'categoria_id.exists' => 'Categoria inválida.',
             'marca.required' => 'Informe a marca do veículo.',
             'marca.min' => 'A marca deve ter pelo menos 2 letras.',
             'marca.max' => 'A marca pode ter no máximo 50 caracteres.',

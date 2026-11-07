@@ -25,6 +25,27 @@
                 </a>
             </div>
         </div>
+        <form method="GET" action="{{ route('veiculos.index') }}" class="row g-2 align-items-center mb-4">
+            <div class="col-auto">
+                <label for="filtroCategoria" class="col-form-label small fw-semibold text-secondary">
+                    <i class="fa-solid fa-filter me-1" style="color: #D4AF37;"></i>Categoria
+                </label>
+            </div>
+            <div class="col-auto">
+                <select id="filtroCategoria" name="categoria" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">Todas</option>
+                    @foreach($categorias as $categoria)
+                        <option value="{{ $categoria->id }}" @selected($categoriaSelecionada == $categoria->id)>{{ $categoria->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @if($categoriaSelecionada)
+                <div class="col-auto">
+                    <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-link text-secondary">Limpar filtro</a>
+                </div>
+            @endif
+        </form>
+
         @if(session('success'))
             <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
                 <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
@@ -44,6 +65,9 @@
                             <span class="badge bg-secondary-subtle text-secondary border rounded-pill px-3 py-1">
                                 <i class="fa-solid fa-tag me-1"></i>{{ ucfirst($veiculo->status) }}
                             </span>
+                            <span class="text-muted small">
+                                <i class="fa-solid fa-layer-group me-1" style="color: #D4AF37;"></i>{{ $veiculo->categoria->nome ?? 'Sem categoria' }}
+                            </span>
                         </div>
                         <div class="card-body px-4">
                             <h5 class="fw-bold mb-1" style="color: #0b132b;">
@@ -58,7 +82,7 @@
                                     R$ {{ number_format($veiculo->valor_atual, 2, ',', '.') }}
                                 </span>
                             </div>
-                            <a href="{{ route('lances.store', ['veiculo_id' => \App\Services\Operations::encryptId($veiculo->id)]) }}"
+                            <a href="{{ route('lances.create', $veiculo->encrypted_id) }}"
                                 class="btn w-100 fw-bold py-2 rounded-3 shadow-sm text-white"
                                 style="background-color: #0b132b;">
                                 <i class="fa-solid fa-gavel me-2" style="color: #D4AF37;"></i>Dar Lance
