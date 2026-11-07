@@ -13,25 +13,14 @@
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
-                <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
-            </div>
-        @endif
+        <x-flash />
 
         <div class="row g-4">
             <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-4 bg-white h-100 overflow-hidden">
                     <div class="card-body p-4 p-sm-5">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="badge rounded-pill px-3 py-1 border {{ $veiculo->status === 'aberto' ? 'bg-success-subtle text-success border-success-subtle' : 'bg-dark text-white border-dark' }}">
-                                <i class="fa-solid {{ $veiculo->status === 'aberto' ? 'fa-lock-open' : 'fa-lock' }} me-1"></i>{{ ucfirst($veiculo->status) }}
-                            </span>
+                            <x-status-badge :status="$veiculo->status" />
                             <span class="text-muted small">
                                 <i class="fa-solid fa-clock me-1" style="color: #D4AF37;"></i>
                                 {{ $veiculo->status === 'aberto' ? 'Encerra em' : 'Encerrou em' }}: {{ $veiculo->data_encerramento->format('d/m/Y H:i') }}
