@@ -5,6 +5,9 @@ use App\Http\Controllers\LanceController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Middleware\CheckIsNotLogged;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RelatorioController;
+
+Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
 
 Route::middleware([CheckIsNotLogged::class])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
