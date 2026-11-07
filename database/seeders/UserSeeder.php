@@ -2,27 +2,27 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('users')->insert([
-            [
-                'nome' => 'fulano',
-                'email' => 'fulano@exemplo.com',
-                'senha' => bcrypt('teste123')
-            ],
-            [
-                'nome' => 'fulano2',
-                'email' => 'fulano2@exemplo.com',
-                'senha' => bcrypt('teste123')
-            ],
+        // usuarios fixos pra usar na apresentacao (senha: teste123)
+        User::create([
+            'nome' => 'fulano',
+            'email' => 'fulano@exemplo.com',
+            'senha' => bcrypt('teste123'),
         ]);
+
+        User::create([
+            'nome' => 'fulano2',
+            'email' => 'fulano2@exemplo.com',
+            'senha' => bcrypt('teste123'),
+        ]);
+
+        // mais alguns usuarios aleatorios pra ter licitantes
+        User::factory(8)->create();
     }
 }

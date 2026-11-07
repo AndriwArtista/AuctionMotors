@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Services\LeilaoService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +19,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategoriasSeeder::class,
             VeiculosSeeder::class,
+            LancesSeeder::class,
         ]);
+
+        // fecha os leiloes que ja venceram: gera os arremates e as notificacoes
+        $encerrados = app(LeilaoService::class)->encerrarVencidos();
+        $this->command?->info("{$encerrados} leilões encerrados com arremate.");
     }
 }
