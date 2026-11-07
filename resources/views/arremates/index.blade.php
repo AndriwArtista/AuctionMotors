@@ -36,10 +36,16 @@
                                     R$ {{ number_format($arremate->valor_final, 2, ',', '.') }}
                                 </span>
                             </div>
-                            <a href="{{ route('lances.create', $arremate->encrypted_veiculo_id) }}"
-                                class="btn btn-light border w-100 fw-semibold rounded-3 text-secondary">
-                                <i class="fa-solid fa-eye me-1"></i> Ver leilão
-                            </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ route('lances.create', $arremate->encrypted_veiculo_id) }}"
+                                    class="btn btn-light border w-100 fw-semibold rounded-3 text-secondary">
+                                    <i class="fa-solid fa-eye me-1"></i> Ver leilão
+                                </a>
+                                <a href="{{ route('relatorios.arremate', \App\Services\Operations::encryptId($arremate->id)) }}"
+                                    class="btn w-100 fw-bold rounded-3 text-white shadow-sm" style="background-color: #0b132b;">
+                                    <i class="fa-solid fa-file-pdf me-1" style="color: #D4AF37;"></i> Comprovante
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

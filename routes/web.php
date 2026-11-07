@@ -41,4 +41,5 @@ Route::middleware(['logged'])->group(function () {
     Route::resource('categorias', CategoriaController::class)->except('show');
 
     Route::get('/relatorios/veiculos', [RelatorioController::class, 'veiculosGeral'])->name('relatorios.veiculos');
+    Route::get('/relatorios/arremates/{id}', [RelatorioController::class, 'comprovanteArremate'])->name('relatorios.arremate');
 });

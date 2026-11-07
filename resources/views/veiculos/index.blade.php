@@ -19,7 +19,7 @@
                     style="background-color: #0b132b;">
                     <i class="fa-solid fa-car me-1" style="color: #D4AF37;"></i> Meus Veículos
                 </a>
-                <a href="{{ route('relatorios.veiculos') }}" target="_blank" class="btn fw-bold text-white shadow-sm ms-1"
+                <a href="{{ route('relatorios.veiculos', array_filter(['categoria' => $categoriaSelecionada])) }}" target="_blank" class="btn fw-bold text-white shadow-sm ms-1"
                     style="background-color: #0b132b;">
                     <i class="fa-solid fa-file-pdf me-1" style="color: #D4AF37;"></i> Relatório PDF
                 </a>
