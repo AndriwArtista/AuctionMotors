@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Veiculo;
 use App\Services\Operations;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LeilaoCriadoMail;
 
 class VeiculoController extends Controller
 {
@@ -79,7 +81,10 @@ class VeiculoController extends Controller
 
         $dados['user_id'] = $user_id;
 
-        Veiculo::create($dados);
+        $veiculo = Veiculo::create($dados);
+        // Dispara a notificação por e-mail
+        Mail::to('teste@usuario.com')->send(new LeilaoCriadoMail($veiculo));
+
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
     }
