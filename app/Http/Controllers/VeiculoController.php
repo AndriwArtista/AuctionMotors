@@ -61,8 +61,8 @@ class VeiculoController extends Controller
 
         $veiculo = Veiculo::create($dados);
 
-        // Dispara a notificação por e-mail
-        Mail::to('teste@usuario.com')->send(new LeilaoCriadoMail($veiculo));
+        // confirma por e-mail pro dono que o leilao foi publicado
+        Mail::to($veiculo->user->email)->send(new LeilaoCriadoMail($veiculo));
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
     }

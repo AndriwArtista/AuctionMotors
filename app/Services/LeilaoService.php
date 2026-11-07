@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class LeilaoService
 {
+    public function __construct(protected NotificacaoService $notificacaoService)
+    {
+    }
+
     /**
      * Fecha todos os leiloes que ja passaram da data de encerramento.
      * Grava o arremate com o maior lance (ou sem vencedor) e muda o status.
@@ -45,6 +49,11 @@ class LeilaoService
             );
 
             $veiculo->update(['status' => 'encerrado']);
+
+            // so avisa na primeira vez que o leilao fecha
+            if ($arremate->wasRecentlyCreated) {
+                $this->notificacaoService->leilaoEncerrado($veiculo, $arremate);
+            }
 
             return $arremate;
         });

@@ -23,7 +23,7 @@ class LeilaoCriadoMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Novo Leilão: ' . $this->veiculo->marca . ' ' . $this->veiculo->modelo,
+            subject: 'Seu leilão foi publicado: ' . $this->veiculo->marca . ' ' . $this->veiculo->modelo,
         );
     }
 

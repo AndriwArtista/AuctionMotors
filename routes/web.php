@@ -4,6 +4,7 @@ use App\Http\Controllers\ArremateController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\LanceController;
+use App\Http\Controllers\NotificacaoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\VeiculoController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::middleware(['logged'])->group(function () {
     Route::post('/lances/{veiculo_id}', [LanceController::class, 'store'])->name('lances.store');
 
     Route::get('/arremates', [ArremateController::class, 'index'])->name('arremates.index');
+
+    Route::get('/notificacoes', [NotificacaoController::class, 'index'])->name('notificacoes.index');
+    Route::patch('/notificacoes/lidas', [NotificacaoController::class, 'marcarTodas'])->name('notificacoes.marcarTodas');
+    Route::patch('/notificacoes/{id}/lida', [NotificacaoController::class, 'marcarLida'])->name('notificacoes.marcarLida');
 
     Route::resource('categorias', CategoriaController::class)->except('show');
 

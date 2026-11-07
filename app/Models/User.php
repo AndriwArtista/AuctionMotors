@@ -34,6 +34,11 @@ class User extends Model
         return $this->hasMany(Veiculo::class);
     }
 
+    public function notificacoes()
+    {
+        return $this->hasMany(Notificacao::class);
+    }
+
     // leiloes que o usuario venceu
     public function arremates()
     {

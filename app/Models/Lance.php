@@ -14,6 +14,12 @@ class Lance extends Model
         'veiculo_id',
         'user_id',
     ];
+
+    protected $casts = [
+        'valor_ofertado' => 'decimal:2',
+        'user_id' => 'integer',
+        'veiculo_id' => 'integer',
+    ];
     public function veiculo()
     {
         return $this->belongsTo(Veiculo::class);
