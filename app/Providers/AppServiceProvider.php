@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Notificacao;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +21,16 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-{
-    Paginator::useBootstrapFive();
-}
+    {
+        Paginator::useBootstrapFive();
+
+        // contador do sino na navbar
+        View::composer('partials.navbar', function ($view) {
+            $userId = session('user.id');
+
+            $view->with('notificacoesNaoLidas', $userId
+                ? Notificacao::where('user_id', $userId)->naoLidas()->count()
+                : 0);
+        });
+    }
 }

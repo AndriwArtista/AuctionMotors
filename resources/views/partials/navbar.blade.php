@@ -24,6 +24,14 @@
         </ul>
 
         <div class="d-flex align-items-center gap-3">
+            <a href="{{ route('notificacoes.index') }}" class="position-relative text-light" title="Notificações">
+                <i class="fa-solid fa-bell fa-lg"></i>
+                @if($notificacoesNaoLidas > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                        {{ $notificacoesNaoLidas > 9 ? '9+' : $notificacoesNaoLidas }}
+                    </span>
+                @endif
+            </a>
             <span class="text-light small"><i class="fa-solid fa-user me-1" style="color: #D4AF37;"></i>{{ session('user.nome') }}</span>
             <form action="{{ route('logout') }}" method="POST" class="m-0">
                 @csrf
