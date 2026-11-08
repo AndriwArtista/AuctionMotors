@@ -105,7 +105,6 @@
             @endforelse
         </div>
 
-        <!-- Links de Paginação -->
         <div class="d-flex justify-content-center mt-5">
             {{ $veiculos->links() }}
         </div>

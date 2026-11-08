@@ -32,7 +32,6 @@ class NotificacaoController extends Controller
     {
         $realId = $this->operations->decryptId($id);
 
-        // so mexe nas notificacoes do proprio usuario
         $notificacao = Notificacao::where('user_id', session('user.id'))->findOrFail($realId);
         $notificacao->update(['lida_em' => now()]);
 

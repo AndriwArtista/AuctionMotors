@@ -24,7 +24,6 @@ class VeiculoController extends Controller
 
     public function index(Request $request)
     {
-        // garante que os leiloes vencidos ja aparecem encerrados mesmo sem o scheduler rodando
         $this->leilaoService->encerrarVencidos();
 
         $categorias = Categoria::orderBy('nome')->get();
@@ -33,7 +32,7 @@ class VeiculoController extends Controller
         $veiculos = Veiculo::with(['categoria', 'arremate.user'])
             ->withMax('lances', 'valor_ofertado')
             ->when($categoriaSelecionada, fn ($q) => $q->where('categoria_id', $categoriaSelecionada))
-            ->orderBy('status') // abertos primeiro
+            ->orderBy('status')
             ->orderBy('data_encerramento')
             ->paginate(3)
             ->withQueryString();
@@ -61,7 +60,6 @@ class VeiculoController extends Controller
 
         $veiculo = Veiculo::create($dados);
 
-        // confirma por e-mail pro dono que o leilao foi publicado
         Mail::to($veiculo->user->email)->send(new LeilaoCriadoMail($veiculo));
 
         return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
@@ -133,7 +131,6 @@ class VeiculoController extends Controller
         return view('veiculos.list', compact('veiculos'));
     }
 
-    // so quem cadastrou o veiculo pode editar ou excluir
     private function verificaDono(Veiculo $veiculo)
     {
         abort_if($veiculo->user_id !== session('user.id'), 403, 'Você não tem permissão para alterar este veículo.');

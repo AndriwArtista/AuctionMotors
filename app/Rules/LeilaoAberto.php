@@ -6,10 +6,6 @@ use App\Models\Veiculo;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-/**
- * Confere se o veiculo pode receber lance:
- * precisa existir, nao pode estar encerrado e nao pode ser do proprio usuario.
- */
 class LeilaoAberto implements ValidationRule
 {
     public function __construct(

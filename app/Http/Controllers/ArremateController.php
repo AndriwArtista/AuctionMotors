@@ -14,7 +14,6 @@ class ArremateController extends Controller
     ) {
     }
 
-    // leiloes que o usuario logado venceu
     public function index()
     {
         $this->leilaoService->encerrarVencidos();

@@ -42,7 +42,6 @@ class AuthController extends Controller
             'senha' => bcrypt($dados['senha']),
         ]);
 
-        // ja entra logado depois de criar a conta
         $this->logarUsuario($request, $user);
 
         return redirect()->route('veiculos.index')->with('success', 'Conta criada com sucesso! Bem-vindo, ' . $user->nome . '.');
@@ -53,7 +52,6 @@ class AuthController extends Controller
         $user->last_login = now();
         $user->save();
 
-        // gera um novo id de sessao pra evitar session fixation
         $request->session()->regenerate();
 
         session([

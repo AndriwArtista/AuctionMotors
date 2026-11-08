@@ -15,7 +15,6 @@ class CategoriaRequest extends FormRequest
 
     public function rules(): array
     {
-        // na edicao ignora a propria categoria na regra de nome unico
         $id = $this->route('categoria')
             ? app(Operations::class)->decryptId($this->route('categoria'))
             : null;

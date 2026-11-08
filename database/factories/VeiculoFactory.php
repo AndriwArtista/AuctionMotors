@@ -7,16 +7,8 @@ use App\Models\User;
 use App\Models\Veiculo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Veiculo>
- */
 class VeiculoFactory extends Factory
 {
-    /**
-     * Modelos por categoria, pra gerar veiculos que fazem sentido
-     * (nada de "Moto Toyota Corolla").
-     * marca => [modelo, valor base]
-     */
     public const CATALOGO = [
         'Carro' => [
             ['Toyota', 'Corolla XEi 2.0', 85000],
@@ -62,9 +54,6 @@ class VeiculoFactory extends Factory
         ]);
     }
 
-    /**
-     * Gera um veiculo coerente com a categoria informada.
-     */
     public function daCategoria(Categoria $categoria): static
     {
         return $this->state(function () use ($categoria) {
@@ -77,9 +66,6 @@ class VeiculoFactory extends Factory
         });
     }
 
-    /**
-     * Leilao que ja passou da data (vira arremate quando o sistema encerrar).
-     */
     public function vencido(): static
     {
         return $this->state(fn () => [
@@ -97,7 +83,6 @@ class VeiculoFactory extends Factory
             'modelo' => $modelo,
             'ano' => $ano,
             'kilometragem' => $idade * fake()->numberBetween(8000, 18000) + fake()->numberBetween(0, 5000),
-            // carro mais velho sai mais barato
             'valor_inicial' => round($valor * (1 - min($idade, 10) * 0.05) * fake()->randomFloat(2, 0.9, 1.1), -2),
             'data_encerramento' => fake()->dateTimeBetween('+1 day', '+20 days'),
             'status' => 'aberto',

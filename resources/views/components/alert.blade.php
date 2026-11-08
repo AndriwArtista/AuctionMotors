@@ -1,4 +1,3 @@
-{{-- Alerta padrao do sistema. Uso: <x-alert type="success">Mensagem</x-alert> --}}
 @props(['type' => 'success'])
 
 @php

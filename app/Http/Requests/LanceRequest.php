@@ -16,9 +16,6 @@ class LanceRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Veiculo da rota (o id vem criptografado na URL).
-     */
     public function veiculo(): ?Veiculo
     {
         if (!$this->veiculo) {

@@ -19,10 +19,6 @@ class NotificacaoService
         ]);
     }
 
-    /**
-     * Chamado depois de um lance novo:
-     * avisa o dono do veiculo e quem tinha o maior lance antes.
-     */
     public function lanceDado(Veiculo $veiculo, Lance $lance, ?int $usuarioSuperadoId): void
     {
         $nomeVeiculo = "{$veiculo->marca} {$veiculo->modelo}";
@@ -45,9 +41,6 @@ class NotificacaoService
         }
     }
 
-    /**
-     * Chamado quando o leilao fecha: avisa o vencedor e o dono.
-     */
     public function leilaoEncerrado(Veiculo $veiculo, Arremate $arremate): void
     {
         $nomeVeiculo = "{$veiculo->marca} {$veiculo->modelo}";

@@ -1,4 +1,3 @@
-{{-- Formulario compartilhado entre o cadastro e a edicao de veiculo --}}
 @php
     $veiculo = $veiculo ?? null;
 @endphp

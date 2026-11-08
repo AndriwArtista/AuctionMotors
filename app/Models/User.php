@@ -40,7 +40,6 @@ class User extends Model
         return $this->hasMany(Notificacao::class);
     }
 
-    // leiloes que o usuario venceu
     public function arremates()
     {
         return $this->hasMany(Arremate::class);

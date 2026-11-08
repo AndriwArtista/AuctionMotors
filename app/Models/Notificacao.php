@@ -20,7 +20,6 @@ class Notificacao extends Model
         'lida_em' => 'datetime',
     ];
 
-    // icone e cor de cada tipo, usados na tela
     public const TIPOS = [
         'lance_recebido' => ['icone' => 'fa-hand-holding-dollar', 'cor' => 'primary'],
         'lance_superado' => ['icone' => 'fa-arrow-trend-up', 'cor' => 'warning'],

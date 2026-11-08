@@ -9,8 +9,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // usuarios fixos pra usar na apresentacao (senha: teste123)
-        // o fulano e o administrador (unico que gerencia as categorias)
+
         $admin = User::create([
             'nome' => 'fulano',
             'email' => 'fulano@exemplo.com',
@@ -25,7 +24,6 @@ class UserSeeder extends Seeder
             'senha' => bcrypt('teste123'),
         ]);
 
-        // mais alguns usuarios aleatorios pra ter licitantes
         User::factory(8)->create();
     }
 }

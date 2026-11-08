@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('veiculo_id')->nullable()->constrained('veiculos')->cascadeOnDelete();
-            // lance_recebido, lance_superado, leilao_vencido, leilao_encerrado
             $table->string('tipo', 30);
             $table->string('mensagem');
             $table->dateTime('lida_em')->nullable();

@@ -11,7 +11,6 @@ class CheckIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // confere no banco, assim nao da pra burlar mexendo na sessao
         $user = User::find(session('user.id'));
 
         abort_unless($user?->is_admin, 403, 'Somente administradores podem acessar essa área.');

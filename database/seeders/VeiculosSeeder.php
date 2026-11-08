@@ -14,7 +14,6 @@ class VeiculosSeeder extends Seeder
         $carro = Categoria::where('nome', 'Carro')->first();
         $suv = Categoria::where('nome', 'SUV')->first();
 
-        // os 3 veiculos fixos de sempre
         Veiculo::create([
             'marca' => 'Toyota',
             'modelo' => 'Corolla XEi 2.0',
@@ -51,7 +50,6 @@ class VeiculosSeeder extends Seeder
             'categoria_id' => $suv->id,
         ]);
 
-        // o resto vem da factory, espalhado entre usuarios e categorias
         $usuarios = User::all();
         $categorias = Categoria::all();
 
@@ -60,7 +58,6 @@ class VeiculosSeeder extends Seeder
                 ->daCategoria($categorias->random())
                 ->state(['user_id' => $usuarios->random()->id]);
 
-            // uns 6 ja vencidos pra aparecer arremate na demo
             if ($i < 6) {
                 $factory = $factory->vencido();
             }
