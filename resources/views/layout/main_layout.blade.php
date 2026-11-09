@@ -7,7 +7,7 @@
     <title>Auction Motors</title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}?v=2" type="image/png">
 </head>
 
 <body class="bg-white min-vh-100">
