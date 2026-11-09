@@ -35,5 +35,17 @@ class LancesSeeder extends Seeder
                 ]);
             }
         }
+
+        $nivus = Veiculo::where('modelo', 'Nivus Highline 1.0 TSI')->first();
+        $maior = Lance::where('veiculo_id', $nivus->id)->max('valor_ofertado') ?? $nivus->valor_inicial;
+        $momento = $nivus->data_encerramento->copy()->subMinute();
+
+        Lance::factory()->create([
+            'veiculo_id' => $nivus->id,
+            'user_id' => 1,
+            'valor_ofertado' => round($maior * 1.03, 2),
+            'created_at' => $momento,
+            'updated_at' => $momento,
+        ]);
     }
 }

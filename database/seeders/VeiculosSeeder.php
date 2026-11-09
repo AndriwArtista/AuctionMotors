@@ -50,6 +50,18 @@ class VeiculosSeeder extends Seeder
             'categoria_id' => $suv->id,
         ]);
 
+        Veiculo::create([
+            'marca' => 'Volkswagen',
+            'modelo' => 'Nivus Highline 1.0 TSI',
+            'ano' => 2023,
+            'kilometragem' => 18000,
+            'valor_inicial' => 105000.00,
+            'status' => 'aberto',
+            'data_encerramento' => now()->subDays(2),
+            'user_id' => 2,
+            'categoria_id' => $suv->id,
+        ]);
+
         $usuarios = User::all();
         $categorias = Categoria::all();
 
