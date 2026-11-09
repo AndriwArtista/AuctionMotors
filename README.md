@@ -112,7 +112,7 @@ php artisan migrate:fresh --seed
 
 Quem se cadastra pela tela `/registrar` entra como usuário comum.
 
-O seeder também cria mais 8 usuários aleatórios (senha `teste123`), 5 categorias, 25 veículos, dezenas de lances e alguns leilões já encerrados com arremate.
+O seeder também cria mais 8 usuários aleatórios (senha `teste123`), 5 categorias, 26 veículos, dezenas de lances e alguns leilões já encerrados com arremate. O fulano sempre vence o leilão do **VW Nivus** (anunciado pelo fulano2), então dá pra testar a tela de arremates e o comprovante em PDF logando com ele.
 
 ---
 
