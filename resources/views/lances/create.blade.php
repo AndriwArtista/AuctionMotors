@@ -99,7 +99,6 @@
                 </div>
             </div>
 
-            <!-- Histórico de Lances (Design Limpo e Moderno) -->
             <div class="col-lg-5">
                 <div class="card border-0 shadow-sm rounded-4 bg-white h-100 overflow-hidden">
                     <div class="card-body p-4">

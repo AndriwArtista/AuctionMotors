@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('veiculos', function (Blueprint $table) {
-            // nao deixa apagar uma categoria que ainda tem veiculo
             $table->foreignId('categoria_id')->nullable()->after('id')
                 ->constrained('categorias')->restrictOnDelete();
         });

@@ -26,7 +26,6 @@ class Arremate extends Model
         return $this->belongsTo(Veiculo::class)->withTrashed();
     }
 
-    // quem venceu o leilao
     public function user()
     {
         return $this->belongsTo(User::class);

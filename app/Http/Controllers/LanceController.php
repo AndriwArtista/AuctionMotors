@@ -34,7 +34,6 @@ class LanceController extends Controller
 
         $veiculo = Veiculo::findOrFail($id);
 
-        // se ja passou da data, fecha o leilao antes de mostrar
         if ($veiculo->status === 'aberto' && $veiculo->data_encerramento->isPast()) {
             $this->leilaoService->encerrar($veiculo);
         }
@@ -47,14 +46,12 @@ class LanceController extends Controller
         return view('lances.create', compact('veiculo', 'lances', 'maiorLance', 'minLance'));
     }
 
-    // as regras (valor minimo, dono, leilao encerrado) ficam no LanceRequest
     public function store(LanceRequest $request, $encrypted_veiculo_id)
     {
         $veiculo = $request->veiculo();
         $user = User::findOrFail(session('user.id'));
         $valor = $request->validated()['valor_ofertado'];
 
-        // trava o veiculo enquanto grava, assim dois lances ao mesmo tempo nao passam com o mesmo valor
         $resultado = DB::transaction(function () use ($veiculo, $valor, $user) {
             Veiculo::whereKey($veiculo->id)->lockForUpdate()->first();
 
@@ -77,7 +74,6 @@ class LanceController extends Controller
             return redirect()->back()->with('error', 'Alguém deu um lance maior antes de você. Tente novamente.');
         }
 
-        // avisa o dono e quem foi superado
         $this->notificacaoService->lanceDado($veiculo, $resultado['lance'], $resultado['superado']);
 
         return redirect()->route('lances.create', $encrypted_veiculo_id)

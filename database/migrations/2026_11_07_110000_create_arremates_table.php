@@ -10,9 +10,7 @@ return new class extends Migration
     {
         Schema::create('arremates', function (Blueprint $table) {
             $table->id();
-            // cada veiculo so pode ter um resultado de leilao
             $table->foreignId('veiculo_id')->unique()->constrained('veiculos')->cascadeOnDelete();
-            // vencedor (fica nulo quando ninguem deu lance)
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('lance_id')->nullable()->constrained('lances')->nullOnDelete();
             $table->decimal('valor_final', 10, 2)->nullable();

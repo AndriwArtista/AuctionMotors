@@ -60,7 +60,6 @@ class CategoriaController extends Controller
             return redirect()->route('categorias.index')->with('error', 'Link inválido.');
         }
 
-        // integridade: categoria com veiculo nao pode sumir
         if ($categoria->veiculos()->exists()) {
             return redirect()->route('categorias.index')
                 ->with('error', 'Não dá pra excluir: existem veículos nessa categoria.');

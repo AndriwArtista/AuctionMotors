@@ -13,11 +13,6 @@ class LeilaoService
     {
     }
 
-    /**
-     * Fecha todos os leiloes que ja passaram da data de encerramento.
-     * Grava o arremate com o maior lance (ou sem vencedor) e muda o status.
-     * Retorna quantos leiloes foram encerrados.
-     */
     public function encerrarVencidos(): int
     {
         $vencidos = Veiculo::where('status', 'aberto')
@@ -50,7 +45,6 @@ class LeilaoService
 
             $veiculo->update(['status' => 'encerrado']);
 
-            // so avisa na primeira vez que o leilao fecha
             if ($arremate->wasRecentlyCreated) {
                 $this->notificacaoService->leilaoEncerrado($veiculo, $arremate);
             }

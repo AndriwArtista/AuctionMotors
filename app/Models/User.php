@@ -22,6 +22,7 @@ class User extends Model
 
     protected $casts = [
         'last_login' => 'datetime',
+        'is_admin' => 'boolean',
     ];
 
     public function lances()
@@ -39,7 +40,6 @@ class User extends Model
         return $this->hasMany(Notificacao::class);
     }
 
-    // leiloes que o usuario venceu
     public function arremates()
     {
         return $this->hasMany(Arremate::class);

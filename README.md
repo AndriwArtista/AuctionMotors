@@ -12,7 +12,7 @@ Na plataforma, qualquer usuário cadastrado pode anunciar um veículo em leilão
 |---|---|
 | **Autenticação** | Cadastro de usuário, login e logout com sessão (senha criptografada com bcrypt, sessão regenerada no login). |
 | **Veículos (CRUD)** | Cadastrar, listar, editar e excluir veículos. Só o dono pode editar/excluir, e leilão encerrado não pode ser editado. Exclusão lógica (Soft Delete). |
-| **Categorias (CRUD)** | Carro, SUV, Moto, Caminhonete, Caminhão... Não é possível excluir uma categoria que ainda tem veículos. |
+| **Categorias (CRUD)** | Carro, SUV, Moto, Caminhonete, Caminhão... **Só o administrador** acessa (middleware `admin`). Não é possível excluir uma categoria que ainda tem veículos. |
 | **Vitrine** | Lista os leilões com paginação, filtro por categoria e status (Aberto/Encerrado). |
 | **Lances** | Lance precisa ser maior que o atual; não dá pra dar lance no próprio veículo nem em leilão encerrado. Gravação com transação e *lock* para evitar dois lances iguais ao mesmo tempo. |
 | **Arremates** | Ao passar a data de encerramento o leilão fecha automaticamente (comando agendado) e o vencedor é registrado. Página "Meus arremates". |
@@ -105,10 +105,12 @@ php artisan migrate:fresh --seed
 
 ## 👤 Usuários de teste
 
-| Nome | E-mail | Senha |
-|---|---|---|
-| fulano | `fulano@exemplo.com` | `teste123` |
-| fulano2 | `fulano2@exemplo.com` | `teste123` |
+| Nome | E-mail | Senha | Perfil |
+|---|---|---|---|
+| fulano | `fulano@exemplo.com` | `teste123` | Administrador |
+| fulano2 | `fulano2@exemplo.com` | `teste123` | Usuário comum |
+
+Quem se cadastra pela tela `/registrar` entra como usuário comum.
 
 O seeder também cria mais 8 usuários aleatórios (senha `teste123`), 5 categorias, 25 veículos, dezenas de lances e alguns leilões já encerrados com arremate.
 
@@ -133,6 +135,7 @@ erDiagram
         string nome
         string email
         string senha
+        boolean is_admin
         datetime last_login
     }
     categorias {
@@ -205,7 +208,7 @@ Todas as rotas, menos login e cadastro, exigem usuário logado (middleware `logg
 | GET/POST | `/lances/{veiculo}` | Detalhes do leilão e dar lance |
 | GET | `/arremates` | Meus arremates |
 | GET/PATCH | `/notificacoes` | Notificações (marcar como lida) |
-| resource | `/categorias` | CRUD de categorias |
+| resource | `/categorias` | CRUD de categorias (só administrador) |
 | GET | `/relatorios/veiculos` | Relatório geral em PDF |
 | GET | `/relatorios/arremates/{id}` | Comprovante de arremate em PDF |
 
@@ -220,7 +223,7 @@ app/
 ├── Console/Commands/EncerrarLeiloes.php   # comando agendado leiloes:encerrar
 ├── Http/
 │   ├── Controllers/                       # Auth, Veiculo, Lance, Categoria, Arremate, Notificacao, Relatorio
-│   ├── Middleware/                        # CheckIsLogged / CheckIsNotLogged
+│   ├── Middleware/                        # CheckIsLogged / CheckIsNotLogged / CheckIsAdmin
 │   └── Requests/                          # Form Requests de validação
 ├── Mail/LeilaoCriadoMail.php
 ├── Models/                                # User, Veiculo, Lance, Categoria, Arremate, Notificacao

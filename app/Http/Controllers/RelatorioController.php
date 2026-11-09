@@ -18,7 +18,6 @@ class RelatorioController extends Controller
     ) {
     }
 
-    // relatorio geral, respeita o filtro de categoria da vitrine (?categoria=)
     public function veiculosGeral(Request $request)
     {
         $this->leilaoService->encerrarVencidos();
@@ -47,7 +46,6 @@ class RelatorioController extends Controller
         return $pdf->stream('relatorio-veiculos-geral.pdf');
     }
 
-    // comprovante do arremate, so o vencedor ou o vendedor podem baixar
     public function comprovanteArremate($id)
     {
         $realId = $this->operations->decryptId($id);

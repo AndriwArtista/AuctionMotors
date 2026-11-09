@@ -26,7 +26,6 @@ class VeiculoRequest extends FormRequest
             'data_encerramento' => 'required|date',
         ];
 
-        // no cadastro o leilao tem que terminar no futuro
         if ($this->isMethod('post')) {
             $regras['data_encerramento'] .= '|after:now';
         }

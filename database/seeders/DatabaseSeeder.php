@@ -10,9 +10,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $this->call([
@@ -22,7 +19,6 @@ class DatabaseSeeder extends Seeder
             LancesSeeder::class,
         ]);
 
-        // fecha os leiloes que ja venceram: gera os arremates e as notificacoes
         $encerrados = app(LeilaoService::class)->encerrarVencidos();
         $this->command?->info("{$encerrados} leilões encerrados com arremate.");
     }

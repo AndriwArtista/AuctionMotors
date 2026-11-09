@@ -1,7 +1,3 @@
-{{--
-    Campo de formulario com icone e mensagem de erro.
-    Uso: <x-campo name="marca" label="Marca" icon="fa-copyright" placeholder="Ex: Toyota" :value="$veiculo->marca ?? ''" />
---}}
 @props([
     'name',
     'label',

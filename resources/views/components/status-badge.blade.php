@@ -1,4 +1,3 @@
-{{-- Badge do status do leilao. Uso: <x-status-badge :status="$veiculo->status" /> --}}
 @props(['status'])
 
 @php
